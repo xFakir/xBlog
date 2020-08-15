@@ -25,7 +25,7 @@ public class TestController {
     @RequestMapping("/noparams")
     public List<Category> test() {
 
-        return categoryMapper.getAllCategory();
+        return categoryMapper.getCategoryList();
     }
 
     @RequestMapping("/aaa")

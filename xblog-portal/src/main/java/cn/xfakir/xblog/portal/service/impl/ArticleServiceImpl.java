@@ -1,4 +1,4 @@
-package cn.xfakir.xblog.portal.service.imp;
+package cn.xfakir.xblog.portal.service.impl;
 
 import cn.xfakir.xblog.common.pojo.Article;
 import cn.xfakir.xblog.common.templates.ArticleTemplate;

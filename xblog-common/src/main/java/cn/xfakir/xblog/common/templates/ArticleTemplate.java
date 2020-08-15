@@ -37,4 +37,19 @@ public class ArticleTemplate {
     public void addArticle(Article article) {
         mongoTemplate.save(article);
     }
+
+    public List<Article> getArticleByCategory(Integer categoryId) {
+        Query query = new Query(Criteria.where("categoryId").is(categoryId));
+        return mongoTemplate.find(query,Article.class);
+    }
+
+    public List<Article> getArticleByTag(Integer tagId) {
+        Query query = new Query(Criteria.where("tags").elemMatch(Criteria.where("tagId").is(tagId)));
+        return mongoTemplate.find(query,Article.class);
+    }
+
+    public List<Article> getArticleBySeries(Integer seriesId) {
+        Query query = new Query(Criteria.where("seriesId").is(seriesId));
+        return mongoTemplate.find(query,Article.class);
+    }
 }

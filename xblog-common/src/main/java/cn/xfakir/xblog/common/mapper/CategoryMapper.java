@@ -22,5 +22,5 @@ public interface CategoryMapper {
             @Result(id = true,column = "category_id",property = "categoryId"),
             @Result(column = "category_name",property = "categoryName")
     })
-    List<Category> getAllCategory();
+    List<Category> getCategoryList();
 }

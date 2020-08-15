@@ -18,8 +18,8 @@ public class Article {
     private Integer articleId;
     private String title;
     private String author;
-    private String tags;
-    private String category;
+    private List<Tag> tags;
+    private Category category;
     private String summary;
     private String content;
 
