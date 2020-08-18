@@ -3,6 +3,7 @@ package cn.xfakir.xblog.portal.web.controller;
 import cn.xfakir.xblog.common.pojo.Article;
 import cn.xfakir.xblog.common.templates.ArticleTemplate;
 import cn.xfakir.xblog.portal.service.ArticleService;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,7 @@ public class ArticleController {
     }
 
     @RequestMapping("/{id}")
-    public Article getArticleById(@PathVariable(name = "id") Integer id) {
+    public Article getArticleById(@PathVariable(name = "id") ObjectId id) {
         return articleService.getArticleById(id);
     }
 

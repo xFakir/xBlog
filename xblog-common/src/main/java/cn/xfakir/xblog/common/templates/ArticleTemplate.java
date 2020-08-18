@@ -1,6 +1,7 @@
 package cn.xfakir.xblog.common.templates;
 
 import cn.xfakir.xblog.common.pojo.Article;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -29,7 +30,7 @@ public class ArticleTemplate {
         return mongoTemplate.findAll(Article.class);
     }
 
-    public Article getArticleById(Integer id) {
+    public Article getArticleById(ObjectId id) {
         Query query = new Query(Criteria.where("articleId").is(id));
         return mongoTemplate.findOne(query,Article.class);
     }

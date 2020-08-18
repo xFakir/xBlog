@@ -11,6 +11,6 @@ import lombok.Data;
  */
 @Data
 public class Tag {
-    private String tagId;
+    private Integer tagId;
     private String tagName;
 }

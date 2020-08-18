@@ -1,6 +1,7 @@
 package cn.xfakir.xblog.portal.service;
 
 import cn.xfakir.xblog.common.pojo.Article;
+import org.bson.types.ObjectId;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public interface ArticleService {
     List<Article> getArticleList();
 
-    Article getArticleById(Integer id);
+    Article getArticleById(ObjectId id);
 
     void addArticle(Article article);
 }

@@ -1,6 +1,8 @@
 package cn.xfakir.xblog.common.pojo;
 
 import lombok.Data;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -15,7 +17,8 @@ import java.util.List;
 @Data
 @Document(collection = "article")
 public class Article {
-    private Integer articleId;
+    @Id
+    private ObjectId articleId;
     private String title;
     private String author;
     private List<Tag> tags;
