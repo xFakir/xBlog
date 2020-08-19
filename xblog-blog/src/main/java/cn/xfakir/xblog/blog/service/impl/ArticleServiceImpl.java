@@ -2,6 +2,7 @@ package cn.xfakir.xblog.blog.service.impl;
 
 import cn.xfakir.xblog.blog.service.ArticleService;
 import cn.xfakir.xblog.common.pojo.Article;
+import cn.xfakir.xblog.common.pojo.vo.Xpage;
 import cn.xfakir.xblog.common.templates.ArticleTemplate;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,5 +50,10 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<Article> getArticleBySeries(Integer seriesId) {
         return articleTemplate.getArticleBySeries(seriesId);
+    }
+
+    @Override
+    public Xpage<Article> getLimitArticle(Integer pageSize, Integer pageNum, String lastId) {
+        return articleTemplate.getLimitArticle(pageSize,pageNum,lastId);
     }
 }

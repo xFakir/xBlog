@@ -1,6 +1,7 @@
 package cn.xfakir.xblog.blog.service;
 
 import cn.xfakir.xblog.common.pojo.Article;
+import cn.xfakir.xblog.common.pojo.vo.Xpage;
 import org.bson.types.ObjectId;
 
 import java.util.List;
@@ -24,4 +25,6 @@ public interface ArticleService {
     List<Article> getArticleByTag(Integer tagId);
 
     List<Article> getArticleBySeries(Integer seriesId);
+
+    Xpage<Article> getLimitArticle(Integer pageSize, Integer pageNum, String lastId);
 }

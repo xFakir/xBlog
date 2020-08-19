@@ -1,5 +1,8 @@
 package cn.xfakir.xblog.common.util;
 
+import cn.xfakir.xblog.common.pojo.vo.Xpage;
+import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -8,8 +11,10 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName : MongoPageHelper
@@ -18,7 +23,7 @@ import java.util.function.Function;
  * @Date : 2020/8/18 21:51
  * @Version : 1.0
  */
-@Component
+
 public class MongoPageHelper {
     public static final int FIRST_PAGE_NUM = 1;
     public static final String ID = "_id";
@@ -37,7 +42,7 @@ public class MongoPageHelper {
      * java.lang.Class, java.util.function.Function, java.lang.Integer, java.lang.Integer,
      * java.lang.String)
      */
-    public <T> PageResult<T> pageQuery(Query query, Class<T> entityClass, Integer pageSize,
+    public <T> Xpage<T> pageQuery(Query query, Class<T> entityClass, Integer pageSize,
                                        Integer pageNum) {
         return pageQuery(query, entityClass, Function.identity(), pageSize, pageNum, null);
     }
@@ -49,7 +54,7 @@ public class MongoPageHelper {
      * java.lang.Class, java.util.function.Function, java.lang.Integer, java.lang.Integer,
      * java.lang.String)
      */
-    public <T, R> PageResult<R> pageQuery(Query query, Class<T> entityClass, Function<T, R> mapper,
+    public <T, R> Xpage<R> pageQuery(Query query, Class<T> entityClass, Function<T, R> mapper,
                                           Integer pageSize, Integer pageNum) {
         return pageQuery(query, entityClass, mapper, pageSize, pageNum, null);
     }
@@ -68,8 +73,8 @@ public class MongoPageHelper {
      * @param <R> 最终返回时，展现给页面时的一条记录的类型。
      * @return PageResult，一个封装page信息的对象.
      */
-    public <T, R> PageResult<R> pageQuery(Query query, Class<T> entityClass, Function<T, R> mapper,
-                                          Integer pageSize, Integer pageNum, String lastId) {
+    public <T, R> Xpage<R> pageQuery(Query query, Class<T> entityClass, Function<T, R> mapper,
+                                     Integer pageSize, Integer pageNum, String lastId) {
         //分页逻辑
         long total = mongoTemplate.count(query, entityClass);
         final Integer pages = (int) Math.ceil(total / (double) pageSize);
@@ -89,10 +94,10 @@ public class MongoPageHelper {
 
         final List<T> entityList = mongoTemplate
                 .find(query.addCriteria(criteria)
-                                .with(new Sort(Lists.newArrayList(new Sort.Order(Sort.Direction.ASC, ID)))),
+                                .with(Sort.by(Lists.newArrayList(new Sort.Order(Sort.Direction.ASC, ID)))),
                         entityClass);
 
-        final PageResult<R> pageResult = new PageResult<>();
+        final Xpage<R> pageResult = new Xpage<>();
         pageResult.setTotal(total);
         pageResult.setPages(pages);
         pageResult.setPageSize(pageSize);
@@ -100,4 +105,39 @@ public class MongoPageHelper {
         pageResult.setList(entityList.stream().map(mapper).collect(Collectors.toList()));
         return pageResult;
     }
+
+    public <T> Xpage<T> pageQuery(Query query, Class<T> entityClass,
+                             Integer pageSize, Integer pageNum, String lastId) {
+        //分页逻辑
+        //分页逻辑
+        long total = mongoTemplate.count(query, entityClass);
+        final Integer pages = (int) Math.ceil(total / (double) pageSize);
+        if (pageNum <= 0 || pageNum > pages) {
+            pageNum = FIRST_PAGE_NUM;
+        }
+        final Criteria criteria = new Criteria();
+        if (StringUtils.isNotBlank(lastId)) {
+            if (pageNum != FIRST_PAGE_NUM) {
+                criteria.and(ID).gt(new ObjectId(lastId));
+            }
+            query.limit(pageSize);
+        } else {
+            int skip = pageSize * (pageNum - 1);
+            query.skip(skip).limit(pageSize);
+        }
+
+        final List<T> entityList = mongoTemplate
+                .find(query.addCriteria(criteria)
+                                .with(Sort.by(Lists.newArrayList(new Sort.Order(Sort.Direction.ASC, ID)))),
+                        entityClass);
+        final Xpage<T> pageResult = new Xpage<>();
+        pageResult.setTotal(total);
+        pageResult.setPages(pages);
+        pageResult.setPageSize(pageSize);
+        pageResult.setPageNum(pageNum);
+        pageResult.setList(new ArrayList<>(entityList));
+
+        return pageResult;
+    }
+
 }

@@ -4,6 +4,7 @@ import cn.xfakir.xblog.blog.service.ArticleService;
 import cn.xfakir.xblog.common.pojo.Article;
 import cn.xfakir.xblog.common.pojo.Category;
 import cn.xfakir.xblog.common.pojo.Tag;
+import cn.xfakir.xblog.common.pojo.vo.Xpage;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,9 +29,11 @@ public class ArticleController {
     private ArticleService articleService;
 
     @RequestMapping("/list")
-    public List<Article>  getArticleList(){
-        return articleService.getArticleList();
+    public Xpage<Article> getArticleList(){
+        // return articleService.getArticleList();
+        return articleService.getLimitArticle(3,2,"5f3bcc1f80b6bd01aacd1d60");
     }
+
 
     @RequestMapping("/id/{id}")
     public Article getArticleById(@PathVariable(name = "id") ObjectId id) {
