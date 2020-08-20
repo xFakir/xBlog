@@ -25,15 +25,26 @@ import java.util.List;
 @RestController
 @RequestMapping("/article")
 public class ArticleController {
+    public static final Integer INFINITE_PAGE_NUM = 2;
+
     @Autowired
     private ArticleService articleService;
 
-    @RequestMapping("/list")
-    public Xpage<Article> getArticleList(){
-        // return articleService.getArticleList();
-        return articleService.getLimitArticle(3,2,"5f3bcc1f80b6bd01aacd1d60");
+    @RequestMapping("/limit")
+    public Xpage<Article> getArticleLimitList(@RequestParam("pageNum") Integer pageNum, @RequestParam("pageSize") Integer pageSize, @RequestParam("lastId") String lastId){
+        System.out.println(pageSize);
+        System.out.println(lastId);
+        return articleService.getLimitArticle(pageSize, pageNum, lastId);
     }
 
+    @RequestMapping("/list")
+    public List<Article> getArticleList() {
+        List<Article> articleList = articleService.getArticleList();
+        Article article = articleList.get(0);
+        System.out.println(article.getArticleId());
+        System.out.println(article.getArticleId().toString());
+        return  articleList;
+    }
 
     @RequestMapping("/id/{id}")
     public Article getArticleById(@PathVariable(name = "id") ObjectId id) {
