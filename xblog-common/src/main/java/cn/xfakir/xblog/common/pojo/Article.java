@@ -1,12 +1,15 @@
 package cn.xfakir.xblog.common.pojo;
 
 import cn.xfakir.xblog.common.config.ObjectIdSerializer;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,6 +19,7 @@ import java.util.List;
  * @Date : 2020/8/10 14:25
  * @Version : 1.0
  */
+@Data
 @Document(collection = "article")
 public class Article {
     @Id
@@ -27,60 +31,8 @@ public class Article {
     private Category category;
     private String summary;
     private String content;
-
-    public ObjectId getArticleId() {
-        return articleId;
-    }
-
-    public void setArticleId(ObjectId articleId) {
-        this.articleId = articleId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public List<Tag> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
+    //@DateTimeFormat来控制入参，@JsonFormat来控制出参
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date publishDate;
 }

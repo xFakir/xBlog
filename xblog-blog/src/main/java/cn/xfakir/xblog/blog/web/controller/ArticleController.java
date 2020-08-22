@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -67,8 +70,13 @@ public class ArticleController {
         return articleList;
     }
 
+    @RequestMapping("/date/{date}")
+    public List<Article> getArticleByDate(@PathVariable(name = "date") String date) {
+        return null;
+    }
+
     @RequestMapping("/test/add")
-    public void getArticle() throws IOException {
+    public void getArticle() throws IOException, ParseException {
         String html = "";
         FileReader fr = new FileReader("D:/JVM.md");
         char[] buffer = new char[1024];
@@ -92,6 +100,12 @@ public class ArticleController {
         article.setSummary("aaa");
         article.setTitle("aaaa");
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        Date date = simpleDateFormat.parse("2020-08-08 10:08:08");
+
+
+        article.setPublishDate(date);
+        System.out.println(article);
         articleService.addArticle(article);
     }
 }
